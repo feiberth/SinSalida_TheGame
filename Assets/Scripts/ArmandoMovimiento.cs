@@ -8,6 +8,8 @@ public class ArmandoMovimiento : MonoBehaviour
     public GameObject BalaPrefab;
     public float JumpForce;
     public float Speed;
+    public Transform contArma;
+    bool tieneArma;
 
     private Rigidbody2D Rigidbody2D;
     private float Horizontal;
@@ -16,6 +18,10 @@ public class ArmandoMovimiento : MonoBehaviour
     private Animator Animator;
     //Para que no salgan tantas balas dispersas
     private float LastSoot;
+    //vamos a crear cuanta vida maneja armando
+    private int Vida = 5;
+
+
 
 
     // Start is called before the first frame update
@@ -34,6 +40,7 @@ public class ArmandoMovimiento : MonoBehaviour
         if (Horizontal < 0.0f) transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
         else if(Horizontal > 0.0f) transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
         Animator.SetBool("running", Horizontal != 0.0f);
+        
 
         //para ver que lo de abajo esta bien vamos a usar lo siguiente
         Debug.DrawRay(transform.position, Vector3.down * 0.17f, Color.red);
@@ -49,11 +56,13 @@ public class ArmandoMovimiento : MonoBehaviour
             Jump();
         }
 
+        
         if (Input.GetKey(KeyCode.Space) && Time.time > LastSoot + 0.25f)
         {
             Shoot();
             LastSoot = Time.time;
         }
+        
 
     }
 
@@ -69,7 +78,8 @@ public class ArmandoMovimiento : MonoBehaviour
         if (transform.localScale.x == 1.0f) direction = Vector2.right;
         else direction = Vector2.left;
 
-        GameObject bala = Instantiate(BalaPrefab, transform.position + direction * 0.1f, Quaternion.identity);
+        
+        GameObject bala = Instantiate(BalaPrefab, transform.position + direction * 0.2f, Quaternion.identity);
         bala.GetComponent<BalaScript>().SetDirection(direction);
     }
 
@@ -77,5 +87,23 @@ public class ArmandoMovimiento : MonoBehaviour
     private void FixedUpdate()
     {
         Rigidbody2D.velocity = new Vector2(Horizontal, Rigidbody2D.velocity.y);
+    }
+
+    //realizar un evento cuando el personaje agarra el arma
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Arma"))
+        {
+            tieneArma = true;
+            Destroy(collision.gameObject);
+            contArma.gameObject.SetActive(true);
+        }
+    }
+
+    //Funcion para la vida
+    public void Vidas()
+    {
+        Vida = Vida - 1;
+        if (Vida == 0) Destroy(gameObject);
     }
 }

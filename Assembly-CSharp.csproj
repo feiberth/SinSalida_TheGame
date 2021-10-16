@@ -62,6 +62,8 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\ArmandoMovimiento.cs" />
     <Compile Include="Assets\Scripts\BalaScript.cs" />
+    <Compile Include="Assets\Scripts\CameraScript.cs" />
+    <Compile Include="Assets\Scripts\EnemyScript.cs" />
     <Reference Include="UnityEngine.Purchasing">
       <HintPath>C:/Users/feibe/Unity-Workspace/SinSalida/Library/ScriptAssemblies/UnityEngine.Purchasing.dll</HintPath>
     </Reference>
